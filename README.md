@@ -1,5 +1,13 @@
 # Farid
 
+## Run
+
+```
+npm install
+
+npm run build # atta un peu
+```
+
 ## Problem
 
 ```
