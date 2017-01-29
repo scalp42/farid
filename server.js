@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import createLogger from 'redux-logger';
 import path from 'path';
 
-const routes = require('./src/routes').default;
+const routes = require('./src/routes').default();
 const logger = createLogger();
 
 const app = express();
@@ -29,7 +29,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.use('/build', express.static(path.join(__dirname, 'build')));
-// }
 
 // app.get('/build/bundle.js', function(req, res) {
 //   res.send("hello")
@@ -84,9 +83,11 @@ function renderFullPage(renderProps, store) {
 
   // Render the component to a string
   const html = renderToString(
-    <Provider store={store}>
-      <RouterContext {...renderProps} />
-    </Provider>
+      React.createElement(
+        Provider,
+        { store: store },
+        React.createElement(RouterContext, renderProps)
+      )
   );
 
 
@@ -108,62 +109,5 @@ function renderFullPage(renderProps, store) {
     </html>
   `
 }
-
-
-
-// app.get('*', (req, res, next) => {
-//   match({ routes: routes, location: req.url }, (err, redirectLocation, renderProps) => {
-//     if (err) return next(err);
-//
-//     if (redirectLocation) {
-//       return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-//     }
-//     console.log(req.url, routes, renderProps, 'hey')
-//     if (!renderProps) {
-//       return next(new Error('Missing render props'));
-//     }
-//
-//     const components = renderProps.components;
-//
-//     if (components.some(comp => comp && comp.displayName === 'error-404')) {
-//       res.status(404);
-//     }
-//
-//     const pageComp = components[components.length - 1].WrappedComponent;
-//     const fetchData = (pageComp && pageComp.fetchData) || (() => {
-//       return Promise.resolve();
-//     });
-//
-//     const initialState = {};
-//     const store = createStore(reducers, initialState, applyMiddleware(thunk));
-//     const { location, params, history } = renderProps;
-//
-//     fetchData({ store, location, params, history })
-//       .then(() => {
-//         const body = renderToString(
-//           <Provider store={store}>
-//             <RouterContext {...renderProps} />
-//           </Provider>
-//         );
-//
-//         const state = store.getState();
-//
-//         res.send(`<!DocType html>
-//           <html>
-//             <head>
-//               <link rel="stylesheet" href="/bundle.css">
-//             </head>
-//             <body>
-//               <div id="root">${body}</div>
-//               <script>window.__REDUX_STATE__ = ${JSON.stringify(state)}</script>
-//               <script src="/bundle.js"></script>
-//             </body>
-//           </html>`);
-//         })
-//         .catch(err => next(err));
-//     })
-// });
-
-
 
 app.listen(PORT, () => { console.log(`listening on port ${PORT}`)})

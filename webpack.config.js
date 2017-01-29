@@ -1,6 +1,5 @@
 var webpack = require('webpack');
 var path = require('path');
-// var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const VENDOR_LIBS = [
   'react', 'redux', 'react-redux', 'react-dom',

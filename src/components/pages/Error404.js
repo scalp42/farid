@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Home = () => {
+const Error404 = () => {
   return (
     <div className="container">
       404 - Page Not Found
@@ -8,4 +8,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Error404
